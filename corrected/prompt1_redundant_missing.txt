@@ -1,0 +1,12 @@
+Task:
+  Write a detailed guide about planting tomatoes.
+
+
+Success Criteria:
+  - The guide must include step-by-step instructions on planting tomatoes.
+  - It should cover preparation, planting, care, and harvesting.
+
+
+Examples:
+  - Normal case: Provide a comprehensive guide that includes soil preparation, seed selection, watering, and pest management.
+  - Edge case: If the user asks for a specific tomato variety, include tailored advice for that variety.

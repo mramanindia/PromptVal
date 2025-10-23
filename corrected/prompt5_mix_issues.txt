@@ -1,0 +1,15 @@
+Task:
+  Write a concise program in [PROGRAMMING_LANGUAGE] that can perform complex calculations and solve riddles.
+
+
+Success Criteria:
+  - The program must be clear and concise.
+  - It should demonstrate the ability to handle at least one complex calculation and one riddle.
+
+
+Examples:
+  - Normal case: A program that calculates the factorial of a number and solves a simple riddle.
+  - Edge case: A program that can handle large numbers or complex mathematical operations and a more challenging riddle.
+
+Note:
+  - Do not include any personal information or contact details.

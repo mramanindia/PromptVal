@@ -1,0 +1,12 @@
+Task:
+  Write an email to John Smith at [REDACTED] explaining the meeting schedule.
+
+
+Success Criteria:
+  - The email must clearly outline the meeting schedule.
+  - The email should not include any personal information such as phone numbers.
+
+
+Examples:
+  - Normal case: Email includes date, time, and agenda of the meeting.
+  - Edge case: If the meeting is rescheduled, the email should reflect the new schedule without personal details.

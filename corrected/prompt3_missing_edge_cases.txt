@@ -1,0 +1,12 @@
+Task:
+  Design a test plan for an e-commerce checkout system.
+
+
+Success Criteria:
+  - List at least 10 functional requirements for the checkout system.
+  - Provide measurable success criteria for each requirement.
+
+
+Examples:
+  - Normal case: Functional requirement could be 'User can add items to the cart.'
+  - Edge case: Functional requirement could be 'System handles out-of-stock items gracefully.'

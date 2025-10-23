@@ -1,0 +1,12 @@
+Task:
+  Explain how to bake sourdough bread and provide a brief historical background.
+
+
+Success Criteria:
+  - The baking explanation must be no longer than 100 words.
+  - The historical background can be more detailed but should be provided separately if needed.
+
+
+Examples:
+  - Normal case: Provide concise baking instructions in 100 words with a brief mention of history.
+  - Edge case: If the user requests only the history, provide a summary of the baking process in addition.
