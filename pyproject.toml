@@ -5,10 +5,10 @@ build-backend = "hatchling.build"
 [project]
 name = "promptval"
 version = "0.1.0"
-description = "Prompt Directory Validator: validate and optionally fix prompt .txt files for redundancy, conflicts, completeness, and PII."
+description = "AI-powered prompt validation and enhancement tool that detects issues like redundancy, conflicts, missing strategy sections, and PII/secrets, then uses multiple LLM providers to generate improved, compliant prompts."
 readme = "README.md"
 authors = [
-  { name = "Pibit Candidate", email = "candidate@example.com" }
+  { name = "Aman India", email = "mramanindia@gmail.com" }
 ]
 requires-python = ">=3.10"
 license = { text = "MIT" }
@@ -19,13 +19,24 @@ dependencies = [
 ]
 keywords = ["prompts", "validation", "cli", "pii", "quality"]
 classifiers = [
-  "Programming Language :: Python :: 3",
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Text Processing :: Linguistic",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 
 [project.urls]
-Homepage = "https://example.com/promptval"
+Homepage = "https://github.com/mramanindia/PromptVal"
+Repository = "https://github.com/mramanindia/PromptVal"
+Documentation = "https://github.com/mramanindia/PromptVal#readme"
+Issues = "https://github.com/mramanindia/PromptVal/issues"
 
 [project.optional-dependencies]
 openai = [
