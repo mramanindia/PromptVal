@@ -51,10 +51,10 @@ promptval prompt --text "Write a story about a cat. The story should be exactly 
 pip install promptval
 
 # Install with specific LLM providers
-pip install promptval[openai]        # OpenAI support
-pip install promptval[anthropic]     # Anthropic support  
-pip install promptval[gemini]        # Google Gemini support
-pip install promptval[all]           # All providers
+pip install "promptval[openai]"        # OpenAI support
+pip install "promptval[anthropic]"     # Anthropic support  
+pip install "promptval[gemini]"        # Google Gemini support
+pip install "promptval[all]"           # All providers
 
 # For development
 pip install promptval[dev]
@@ -250,10 +250,10 @@ export GOOGLE_API_KEY=your_key_here
 
 | Provider | Models | Installation | API Key |
 |----------|--------|--------------|---------|
-| **OpenAI** | gpt-4o, gpt-4o-mini, gpt-3.5-turbo | `pip install promptval[openai]` | `OPENAI_API_KEY` |
-| **Anthropic** | claude-3-5-sonnet-latest, claude-3-haiku, claude-3-opus | `pip install promptval[anthropic]` | `ANTHROPIC_API_KEY` |
-| **Google Gemini** | gemini-1.5-pro, gemini-1.5-flash | `pip install promptval[gemini]` | `GOOGLE_API_KEY` |
-| **OpenAI-Compatible** | Any OpenAI-compatible API | `pip install promptval[openai]` | Provider-specific |
+| **OpenAI** | gpt-4o, gpt-4o-mini, gpt-3.5-turbo | `pip install "promptval[openai]"` | `OPENAI_API_KEY` |
+| **Anthropic** | claude-3-5-sonnet-latest, claude-3-haiku, claude-3-opus | `pip install "promptval[anthropic]"` | `ANTHROPIC_API_KEY` |
+| **Google Gemini** | gemini-1.5-pro, gemini-1.5-flash | `pip install "promptval[gemini]"` | `GOOGLE_API_KEY` |
+| **OpenAI-Compatible** | Any OpenAI-compatible API | `pip install "promptval[openai]"` | Provider-specific |
 
 ## 📊 Output Format
 
