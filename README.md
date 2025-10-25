@@ -2,29 +2,55 @@
 
 **AI-Powered Prompt Validation and Enhancement Tool**
 
-PromptVal is a comprehensive Python package and CLI tool that validates, analyzes, and enhances prompt files. It detects issues like redundancy, conflicts, missing strategy sections, and PII/secrets, then uses AI to generate improved, compliant prompts.
+Transform your raw prompts into professional, compliant, and effective AI instructions with intelligent validation, conflict detection, and automated enhancement.
 
-## ✨ Features
+## 🚀 Quick Start
 
-- **🔍 Smart Validation**: Detects redundant instructions, conflicting requirements, and missing strategy sections
-- **🛡️ PII Protection**: Automatically identifies and redacts personal information, API keys, and secrets
-- **🤖 AI Enhancement**: Uses multiple LLM providers (OpenAI, Anthropic, Google Gemini, X.ai Grok) to fix and improve prompts
-- **📊 Comprehensive Scoring**: Provides detailed scoring and issue categorization
-- **🔧 Multiple Interfaces**: CLI tool, Python API, and programmatic usage
-- **⚡ Offline Fallback**: Works without LLM when needed, focusing on PII redaction and basic formatting
+### Example: From Problematic to Perfect
 
-## 🚀 Installation
-
-### Basic Installation
-
-```bash
-pip install promptval
+**Input Prompt:**
+```
+Write a story about a cat. The story should be exactly 100 words long. 
+Also include a comprehensive 5000-word analysis of feline behavior. 
+Make sure to include my email: john.doe@example.com
 ```
 
-### With LLM Provider Support
+**PromptVal Analysis:**
+```bash
+promptval prompt --text "Write a story about a cat. The story should be exactly 100 words long. Also include a comprehensive 5000-word analysis of feline behavior. Make sure to include my email: john.doe@example.com"
+```
+
+**Output:**
+```json
+{
+  "score": 40,
+  "issues": [
+    {
+      "type": "conflict",
+      "severity": "error", 
+      "message": "Conflicting length requirements: 100 words vs 5000 words",
+      "suggestion": "Separate the task into two distinct parts: a short story and a detailed analysis"
+    },
+    {
+      "type": "pii",
+      "severity": "error",
+      "message": "Personal information (email) included in the prompt",
+      "suggestion": "Remove any personal information from the prompt"
+    }
+  ],
+  "fixed_prompt": "Task:\n  Write a story about a cat and provide an analysis of feline behavior.\n\nSuccess Criteria:\n  - The story must be exactly 100 words long\n  - The analysis should be a separate section, with a minimum of 500 words\n\nExamples:\n  - Normal case: A 100-word story about a cat's adventure followed by a brief analysis\n  - Edge case: If the story is about a specific cat breed, ensure the analysis includes behaviors specific to that breed"
+}
+```
+
+## 📦 Installation
+
+### From PyPI (Recommended)
 
 ```bash
-# Install with specific provider
+# Basic installation
+pip install promptval
+
+# Install with specific LLM providers
 pip install promptval[openai]        # OpenAI support
 pip install promptval[anthropic]     # Anthropic support  
 pip install promptval[gemini]        # Google Gemini support
@@ -34,98 +60,183 @@ pip install promptval[all]           # All providers
 pip install promptval[dev]
 ```
 
-## 🎯 Quick Start
-
-### CLI Usage
-
-**Scan and validate prompts in a directory:**
+### From Source (Development)
 
 ```bash
-# Basic validation (requires API key)
+# Clone the repository
+git clone https://github.com/mramanindia/PromptVal.git
+cd PromptVal
+
+# Install in development mode
+pip install -e .
+
+# Install with specific LLM providers
+pip install -e ".[openai]"        # OpenAI support
+pip install -e ".[anthropic]"     # Anthropic support  
+pip install -e ".[gemini]"        # Google Gemini support
+pip install -e ".[all]"           # All providers
+
+# For development
+pip install -e ".[dev]"
+```
+
+## 🎯 Core Capabilities
+
+### 1. **Intelligent Issue Detection**
+- **🔍 Redundancy Detection**: Identifies repetitive or unnecessary instructions
+- **⚔️ Conflict Resolution**: Detects contradictory requirements and impossible constraints
+- **📋 Completeness Analysis**: Ensures essential sections are present (Task, Success Criteria, Examples, CoT/ToT guidance)
+- **🛡️ PII & Security**: Automatically detects and redacts sensitive information
+
+### 2. **Multi-Provider AI Enhancement**
+- **OpenAI**: GPT-4o, GPT-4o-mini, GPT-3.5-turbo
+- **Anthropic**: Claude-3.5-Sonnet, Claude-3-Haiku, Claude-3-Opus
+- **Google Gemini**: Gemini-1.5-Pro, Gemini-1.5-Flash
+- **OpenAI-Compatible**: Any OpenAI-compatible API (local models, custom endpoints)
+
+### 3. **Comprehensive Scoring System**
+- **100 points**: Perfect prompt with no issues
+- **70-99 points**: Good prompt with minor suggestions
+- **50-69 points**: Moderate issues requiring attention
+- **0-49 points**: Significant issues that must be addressed
+
+### 4. **Multiple Interfaces**
+- **CLI Tool**: Command-line interface for batch processing
+- **Python API**: Programmatic integration for applications
+- **Interactive Mode**: Step-by-step validation with user confirmation
+
+## 🔧 Usage
+
+### Command Line Interface
+
+**Analyze a single prompt:**
+```bash
+# Set your API key
 export OPENAI_API_KEY=your_key_here
+
+# Analyze text directly
+promptval prompt --text "Your prompt here"
+
+# Analyze from file
+promptval prompt --file prompt.txt
+
+# Use specific model
+promptval prompt --text "Your prompt" --model "gpt-4o"
+```
+
+**Process multiple files:**
+```bash
+# Scan directory with report
 promptval scan ./prompts --report-json report.json
 
 # Apply fixes automatically
 promptval scan ./prompts --fix --out-dir ./corrected
 
-# Use different provider
-promptval scan ./prompts --provider anthropic --model claude-3-sonnet-20240229
+# Interactive validation
+promptval validate ./prompts --report-json report.json
 
-# Offline mode (PII redaction only)
-promptval scan ./prompts --no-llm
+# Auto-apply without confirmation
+promptval validate ./prompts --yes
 ```
 
-**Analyze a single prompt:**
-
+**Use different providers:**
 ```bash
-# From text
-promptval prompt --text "Your prompt here"
+# Anthropic Claude
+promptval scan ./prompts --provider anthropic --model claude-3-5-sonnet-latest
 
-# From file
-promptval prompt --file prompt.txt
+# Google Gemini
+promptval scan ./prompts --provider gemini --model gemini-1.5-pro
+
+# OpenAI-compatible (local model)
+promptval scan ./prompts --provider openai_compatible --base-url http://localhost:11434/v1
 ```
 
-### Python API Usage
+### Python API
 
-**Basic validation:**
-
+**Basic analysis:**
 ```python
-from promptval import analyze_prompt, PromptValConfig
+from promptval import analyze_prompt
 
 # Analyze a single prompt
 result = analyze_prompt("Your prompt text here")
-print(f"Score: {result['score']}")
+print(f"Score: {result['score']}/100")
 print(f"Issues: {len(result['issues'])}")
 
-# With custom configuration
-config = PromptValConfig(
-    provider="openai",
-    model="gpt-4o-mini",
-    temperature=0.1
-)
-result = analyze_prompt("Your prompt", config)
+# Access detailed results
+for issue in result['issues']:
+    print(f"- {issue['type'].upper()}: {issue['message']}")
+    print(f"  Suggestion: {issue['suggestion']}")
 ```
 
-**Directory validation:**
-
+**Directory processing:**
 ```python
 from promptval.api import validate_directory, apply_fixes
 
 # Validate all .txt files in directory
 results = validate_directory("./prompts", use_llm=True)
 
-# Apply fixes to corrected files
+# Print summary
+for result in results:
+    print(f"{result.file_path}: {result.score}/100")
+
+# Apply fixes
 apply_fixes(results, out_dir="./corrected")
 ```
 
-**Advanced usage with provider selection:**
-
+**Custom configuration:**
 ```python
-from promptval.api import validate_file
-from promptval.llm.provider import ProviderFactory
+from promptval import analyze_prompt, PromptValConfig
 
-# Configure provider
-provider = ProviderFactory.create_provider(
-    provider_type="openai",
+# Configure specific provider and settings
+config = PromptValConfig(
+    provider="openai",
     model="gpt-4o-mini",
-    api_key="your_key_here"
+    temperature=0.1,
+    timeout=30.0
 )
 
-# Validate with specific provider
-result = validate_file("prompt.txt", use_llm=True)
+result = analyze_prompt("Your prompt", config)
 ```
 
-## 🔧 Configuration
+## 🔍 Validation Rules
+
+### Issue Types
+
+| Type | Description | Example |
+|------|-------------|---------|
+| **`redundancy`** | Repetitive or unnecessary content | "Write a story. Create a narrative. Tell a tale." |
+| **`conflict`** | Contradictory instructions | "Write exactly 100 words" + "Write at least 500 words" |
+| **`completeness`** | Missing required sections | No success criteria or examples provided |
+| **`pii`** | Personal information detected | Email addresses, phone numbers, API keys |
+
+### Severity Levels
+
+| Level | Points Deducted | Description |
+|-------|----------------|-------------|
+| **`error`** | -30 | Critical issues that must be fixed |
+| **`warning`** | -10 | Important issues that should be addressed |
+| **`info`** | -5 | Suggestions for improvement |
+
+### PII Detection Patterns
+
+PromptVal automatically detects and redacts:
+
+- **Personal Information**: Email addresses, phone numbers, SSNs
+- **API Keys**: OpenAI, AWS, Google, GitHub, Slack, Stripe tokens
+- **Credentials**: Private keys, JWT tokens, bearer tokens
+- **Financial Data**: Credit card numbers, IBAN numbers
+- **Network Data**: IPv4/IPv6 addresses
+- **Generic Patterns**: Passwords, tokens, sensitive identifiers
+
+## ⚙️ Configuration
 
 ### Environment Variables
-
-Set these environment variables for automatic configuration:
 
 ```bash
 # Provider selection
 export PROMPTVAL_PROVIDER=openai
 export PROMPTVAL_MODEL=gpt-4o-mini
-export PROMPTVAL_BASE_URL=https://api.openai.com/v1  # For OpenAI-compatible
+export PROMPTVAL_BASE_URL=https://api.openai.com/v1
 export PROMPTVAL_TIMEOUT=30.0
 export PROMPTVAL_TEMPERATURE=0.0
 
@@ -133,49 +244,20 @@ export PROMPTVAL_TEMPERATURE=0.0
 export OPENAI_API_KEY=your_key_here
 export ANTHROPIC_API_KEY=your_key_here
 export GOOGLE_API_KEY=your_key_here
-export XAI_API_KEY=your_key_here
 ```
 
 ### Supported Providers
 
-| Provider | Models | Installation |
-|----------|--------|--------------|
-| **OpenAI** | gpt-4o, gpt-4o-mini, gpt-3.5-turbo | `pip install promptval[openai]` |
-| **Anthropic** | claude-3-opus, claude-3-sonnet, claude-3-haiku | `pip install promptval[anthropic]` |
-| **Google Gemini** | gemini-pro, gemini-pro-vision | `pip install promptval[gemini]` |
-| **X.ai Grok** | grok-beta | `pip install promptval[all]` |
-| **OpenAI-Compatible** | Any OpenAI-compatible API | `pip install promptval[openai]` |
-
-## 📋 Validation Rules
-
-PromptVal checks for:
-
-### 1. **Redundancy Detection**
-- Identifies repetitive or unnecessary instructions
-- Suggests consolidation of similar requirements
-
-### 2. **Conflict Resolution**
-- Detects contradictory instructions
-- Flags impossible or conflicting requirements
-
-### 3. **Completeness Analysis**
-- Ensures presence of essential sections:
-  - Clear task description
-  - Success criteria
-  - Examples (normal and edge cases)
-  - Chain of Thought (CoT) or Tree of Thought (ToT) guidance when needed
-
-### 4. **PII & Security**
-- Automatically detects and redacts:
-  - Email addresses, phone numbers, SSNs
-  - API keys and tokens
-  - Credit card numbers
-  - Private keys and credentials
-  - IP addresses and other sensitive data
+| Provider | Models | Installation | API Key |
+|----------|--------|--------------|---------|
+| **OpenAI** | gpt-4o, gpt-4o-mini, gpt-3.5-turbo | `pip install promptval[openai]` | `OPENAI_API_KEY` |
+| **Anthropic** | claude-3-5-sonnet-latest, claude-3-haiku, claude-3-opus | `pip install promptval[anthropic]` | `ANTHROPIC_API_KEY` |
+| **Google Gemini** | gemini-1.5-pro, gemini-1.5-flash | `pip install promptval[gemini]` | `GOOGLE_API_KEY` |
+| **OpenAI-Compatible** | Any OpenAI-compatible API | `pip install promptval[openai]` | Provider-specific |
 
 ## 📊 Output Format
 
-### Validation Results
+### Validation Result Structure
 
 ```python
 {
@@ -184,51 +266,36 @@ PromptVal checks for:
     "issues": [
         {
             "type": "redundancy",
-            "severity": "warning", 
+            "severity": "warning",
             "message": "Instruction repeated multiple times",
             "suggestion": "Consolidate into single clear instruction",
             "span": [10, 50]
         }
     ],
-    "fixed_text": "Enhanced prompt with all issues resolved..."
+    "fixed_prompt": "Enhanced prompt with all issues resolved...",
+    "provider": {
+        "name": "openai",
+        "model": "gpt-4o-mini",
+        "temperature": 0.0,
+        "timeout": 30.0
+    }
 }
 ```
 
-### Issue Types
-- `redundancy`: Repetitive or unnecessary content
-- `conflict`: Contradictory instructions  
-- `completeness`: Missing required sections
-- `pii`: Personal information or secrets detected
+### CLI Output
 
-### Severity Levels
-- `error`: Critical issues that must be fixed
-- `warning`: Important issues that should be addressed
-- `info`: Suggestions for improvement
+```
+                  PromptVal Report: ./prompts                  
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━┓
+┃ File                           ┃ Issues ┃ Errors ┃ Warnings ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━┩
+│ prompt1.txt                    │ 2      │ 1      │ 1        │
+│ prompt2.txt                    │ 0      │ 0      │ 0        │
+│ prompt3.txt                    │ 3      │ 2      │ 1        │
+└────────────────────────────────┴────────┴────────┴──────────┘
+```
 
 ## 🛠️ Development
-
-### Setup Development Environment
-
-```bash
-git clone https://github.com/mramanindia/PromptVal.git
-cd PromptVal
-pip install -e ".[dev]"
-```
-
-### Running Tests
-
-```bash
-# Run all tests
-pytest
-
-# Run with coverage
-pytest --cov=promptval --cov-report=html
-
-# Run specific test categories
-pytest tests/test_pii.py          # PII detection tests
-pytest tests/test_llm_fix.py      # LLM integration tests (requires API keys)
-pytest tests/test_offline_fallback.py  # Offline functionality tests
-```
 
 ### Project Structure
 
@@ -249,6 +316,76 @@ promptval/
 └── rules/                   # Validation rules
     ├── core.py              # Main validation logic
     └── pii.py               # PII detection patterns
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=promptval --cov-report=html
+
+# Run specific test categories
+pytest tests/test_pii.py          # PII detection tests
+pytest tests/test_llm_fix.py      # LLM integration tests (requires API keys)
+pytest tests/test_offline_fallback.py  # Offline functionality tests
+```
+
+### Setup Development Environment
+
+```bash
+git clone https://github.com/mramanindia/PromptVal.git
+cd PromptVal
+pip install -e ".[dev]"
+```
+
+## 🚀 Advanced Features
+
+### Offline Mode
+
+When LLM is not available, PromptVal falls back to:
+- PII detection and redaction using regex patterns
+- Basic prompt structuring and formatting
+- Chain of Thought detection and addition
+- Compliance framework enforcement
+
+```python
+# Force offline mode
+from promptval.api import validate_file
+result = validate_file("prompt.txt", use_llm=False)
+```
+
+### Custom Provider Integration
+
+```python
+from promptval.llm.provider import ProviderFactory
+
+# Create custom provider
+provider = ProviderFactory.create_provider(
+    provider_type="openai_compatible",
+    model="custom-model",
+    api_key="your_key",
+    base_url="https://your-api.com/v1"
+)
+```
+
+### Batch Processing
+
+```python
+import os
+from pathlib import Path
+from promptval.api import validate_file
+
+# Process multiple files
+prompt_files = Path("./prompts").glob("*.txt")
+results = []
+
+for file_path in prompt_files:
+    result = validate_file(str(file_path))
+    results.append(result)
+    print(f"Processed {file_path.name}: {result.score}/100")
 ```
 
 ## 🤝 Contributing
@@ -274,4 +411,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Need help?** Check out the [test files](tests/) for usage examples or open an issue on GitHub.
+**Need help?** Check out the [examples](examples/) directory for usage examples or open an issue on GitHub.
